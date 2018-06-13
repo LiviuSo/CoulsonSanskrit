@@ -5,7 +5,7 @@ import kotlin.collections.ArrayList
 /**
  * Returns the titles/headers of the chapters/sections
  */
-class HeadersTitlesHelper(private var titles: ArrayList<String>) {
+class TitlesHelper(private var titles: ArrayList<String>) { // todo: write unit tests
 
     //    private var titles: ArrayList<String> = arrayListOf("Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4") // initially contains only chapter titles
     companion object {
@@ -16,7 +16,16 @@ class HeadersTitlesHelper(private var titles: ArrayList<String>) {
                 , 3 to arrayListOf("Section 41", "Section 42", "Section 43", "Section 44")
                 , 4 to arrayListOf("Section 51", "Section 52", "Section 53", "Section 54")
         )
+
         private var currentlyExpanded: Int = -1
+
+        fun generateChapterTitles(): ArrayList<String> {
+            val titles = arrayListOf<String>()
+            (1..sectionTitles.keys.size).forEach {
+                titles.add("Chapter $it")
+            }
+            return titles
+        }
     }
 
     fun expandData(position: Int) {
@@ -24,7 +33,7 @@ class HeadersTitlesHelper(private var titles: ArrayList<String>) {
 
         var positionToExpand = position
         if (currentlyExpanded != -1) { // collapse the previously expanded
-            if(currentlyExpanded < position) { // adjust the position to expand
+            if (currentlyExpanded < position) { // adjust the position to expand
                 val sectionCurrentlyExpanded = sectionTitles[currentlyExpanded]
                 positionToExpand -= sectionCurrentlyExpanded!!.size
             }
