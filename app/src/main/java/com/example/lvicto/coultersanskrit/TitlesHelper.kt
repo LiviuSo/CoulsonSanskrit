@@ -7,27 +7,6 @@ import kotlin.collections.ArrayList
  */
 class TitlesHelper(private var titles: ArrayList<String>) { // todo: write unit tests
 
-    //    private var titles: ArrayList<String> = arrayListOf("Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4") // initially contains only chapter titles
-    companion object {
-        private var sectionTitles = mapOf(
-                0 to arrayListOf("Section 11", "Section 12", "Section 13", "Section 14")
-                , 1 to arrayListOf("Section 21", "Section 22", "Section 23", "Section 24")
-                , 2 to arrayListOf("Section 31", "Section 32", "Section 33", "Section 34")
-                , 3 to arrayListOf("Section 41", "Section 42", "Section 43", "Section 44")
-                , 4 to arrayListOf("Section 51", "Section 52", "Section 53", "Section 54")
-        )
-
-        private var currentlyExpanded: Int = -1
-
-        fun generateChapterTitles(): ArrayList<String> {
-            val titles = arrayListOf<String>()
-            (1..sectionTitles.keys.size).forEach {
-                titles.add("Chapter $it")
-            }
-            return titles
-        }
-    }
-
     fun expandData(position: Int) {
         assert(position >= 0 && position < titles.size)
 
@@ -43,9 +22,9 @@ class TitlesHelper(private var titles: ArrayList<String>) { // todo: write unit 
         // remove each corresponding subsection title
         val sections = sectionTitles[positionToExpand]
         if (positionToExpand < titles.size - 1) {
-            titles.addAll(positionToExpand + 1, sections!!.toList())
+            titles.addAll(positionToExpand + 1, sections!!.map { MyApplication.application.getString(it) })
         } else {
-            titles.addAll(sections!!.toList())
+            titles.addAll(sections!!.map { MyApplication.application.getString(it) })
         }
         currentlyExpanded = positionToExpand
     }
@@ -73,4 +52,29 @@ class TitlesHelper(private var titles: ArrayList<String>) { // todo: write unit 
         buffer.append(" ")
         return buffer.toString()
     }
+
+    companion object {
+        private var currentlyExpanded: Int = -1
+
+        fun generateChapterTitles(): ArrayList<String> {
+            val titles = arrayListOf<String>() // todo find how to access layered it with(arrayListOf()) { (0..2).forEach() { ....}}
+            (1..sectionTitles.keys.size).forEach {
+                titles.add("${MyApplication.application.getString(R.string.chapter)} $it")
+            }
+            return titles
+        }
+
+        private var sectionTitles = sortedMapOf(
+                0 to arrayListOf(R.string.section_01_01,
+                        R.string.section_01_02,
+                        R.string.section_01_03,
+                        R.string.section_01_04,
+                        R.string.section_01_05,
+                        R.string.section_01_06,
+                        R.string.section_01_07,
+                        R.string.section_01_08,
+                        R.string.section_01_09)
+        )
+    }
+
 }

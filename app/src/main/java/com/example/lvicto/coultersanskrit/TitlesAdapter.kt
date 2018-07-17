@@ -1,6 +1,7 @@
 package com.example.lvicto.coultersanskrit
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,7 +38,10 @@ class TitlesAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
                     Log.d(LOG_TAG, "new data: $helper")
                 },
                 View.OnClickListener {
-                    Toast.makeText(context, "Tapped section", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(context, "Tapped section", Toast.LENGTH_SHORT).show() // todo remove
+                    with(context) {
+                        startActivity(Intent(this, TextBookActivity::class.java))
+                    }
                 }
         )
     }
