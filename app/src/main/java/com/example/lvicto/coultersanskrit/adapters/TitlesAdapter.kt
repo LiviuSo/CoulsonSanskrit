@@ -1,4 +1,4 @@
-package com.example.lvicto.coultersanskrit
+package com.example.lvicto.coultersanskrit.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -9,11 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.example.lvicto.coultersanskrit.R
+import com.example.lvicto.coultersanskrit.models.TitlesProvider
+import com.example.lvicto.coultersanskrit.ui.TextBookActivity
 import java.util.ArrayList
 
-class TitlesAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private val data: ArrayList<String> = TitlesHelper.generateChapterTitles()
+class TitlesAdapter(private val context: Context, var data: ArrayList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val item = LayoutInflater.from(parent.context).inflate(R.layout.chapter_title, parent, false)
@@ -27,7 +28,7 @@ class TitlesAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
                 getItemViewType(position),
                 View.OnClickListener {
                     Toast.makeText(context, "Tapped: ${data[position]}", Toast.LENGTH_SHORT).show()
-                    val helper = TitlesHelper(data)
+                    val helper = TitlesProvider(data)
                     // collapse if already expanded or just expand
                     if (helper.isExpanded(position)) {
                         helper.collapseData(position)

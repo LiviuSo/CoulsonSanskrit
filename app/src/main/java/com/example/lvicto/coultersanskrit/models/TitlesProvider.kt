@@ -1,11 +1,13 @@
-package com.example.lvicto.coultersanskrit
+package com.example.lvicto.coultersanskrit.models
 
+import com.example.lvicto.coultersanskrit.MyApplication
+import com.example.lvicto.coultersanskrit.R
 import kotlin.collections.ArrayList
 
 /**
  * Returns the titles/headers of the chapters/sections
  */
-class TitlesHelper(private var titles: ArrayList<String>) { // todo: write unit tests
+class TitlesProvider(private var titles: ArrayList<String>) { // todo: write unit tests
 
     fun expandData(position: Int) {
         assert(position >= 0 && position < titles.size)

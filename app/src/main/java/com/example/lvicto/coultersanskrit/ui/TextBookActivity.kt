@@ -1,16 +1,14 @@
-package com.example.lvicto.coultersanskrit
+package com.example.lvicto.coultersanskrit.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.widget.Button
 import android.widget.ImageView
+import com.example.lvicto.coultersanskrit.R
 
 
 class TextBookActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
