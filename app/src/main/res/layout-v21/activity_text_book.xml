@@ -35,11 +35,10 @@
                 android:id="@+id/fabDictionary"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="21dp"
-                android:layout_marginRight="21dp"
                 android:layout_marginEnd="21dp"
+                android:elevation="11dp"
                 android:src="@drawable/ic_add_24dp"/>
 
     </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

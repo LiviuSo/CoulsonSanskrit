@@ -1,22 +1,21 @@
 package com.example.sanskritkeyboard
 
-import android.app.Service
 import android.content.Context
-import android.content.Intent
 import android.inputmethodservice.InputMethodService
 import android.inputmethodservice.Keyboard
 import android.inputmethodservice.KeyboardView
 import android.media.AudioManager
-import android.os.IBinder
 import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.InputConnection
-import kotlinx.android.synthetic.main.keyboard.view.*
-import org.w3c.dom.CharacterData
 import java.lang.Character.isLetter
 import java.lang.Character.toUpperCase
 import java.lang.String.valueOf
 
+/**
+ * Expose intents to change the locales programatically
+ * Must include Sanskrit, IAST, Romnana, English
+ *
+ */
 class CustomKeyboard : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
     private lateinit var kv: KeyboardView
