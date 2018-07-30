@@ -1,16 +1,15 @@
 package com.example.lvicto.coultersanskrit.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import com.example.lvicto.coultersanskrit.MyApplication.Companion.application
-import com.example.lvicto.coultersanskrit.ui.MainActivity
-import android.content.pm.ResolveInfo
 
 
 object KeyboardHelper {
@@ -18,9 +17,10 @@ object KeyboardHelper {
     private val LOG_TAG = this::class.java.simpleName
 
 
-    fun sendToPlayStore() {
+    fun sendToPlayStore(packageName: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse("market://details?id=sky.sanskrit.myphotokeyboard")
+        intent.data = Uri.parse("market://details?id=$packageName")
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
         application.startActivity(intent)
     }
 
@@ -32,12 +32,11 @@ object KeyboardHelper {
         }.isNotEmpty()
     }
 
-    fun showSoftInputMethods() {
+    fun showSoftInputMethodsSelector() {
         inputManager.showInputMethodPicker()
     }
 
     fun isDefaultInputMethod(name: String): Boolean = Settings.Secure.getString(application.contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD).contains(name)
-
 
     fun softInputInstalled(packageName: String): Boolean {
         val pm: PackageManager = application.packageManager
@@ -46,5 +45,11 @@ object KeyboardHelper {
         return pkgAppsList.any {
             it.packageName == packageName
         }
+    }
+
+    fun showInputMethodsManager(activity: Activity) {
+        val intent = Intent (android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS)
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
+        activity.startActivityForResult(intent, 0) // todo try to use startActivityForResult()
     }
 }

@@ -10,14 +10,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+        <activity android:name=".ui.activities.MainActivity"
+                  android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".ui.TextBookActivity">
+        <activity android:name=".ui.activities.TextBookActivity"
+                  android:screenOrientation="portrait" >
         </activity>
 
         <service
@@ -33,7 +30,17 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.DictionaryActivity">
+        <activity android:name=".ui.activities.DictionaryActivity"
+                  android:screenOrientation="portrait" >
+        </activity>
+
+        <activity android:name=".ui.activities.SetupActivity"
+                  android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
         </activity>
     </application>
 

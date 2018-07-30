@@ -1,4 +1,4 @@
-package com.example.lvicto.coultersanskrit.ui
+package com.example.lvicto.coultersanskrit.ui.activities
 
 import android.content.Intent
 import android.os.Bundle

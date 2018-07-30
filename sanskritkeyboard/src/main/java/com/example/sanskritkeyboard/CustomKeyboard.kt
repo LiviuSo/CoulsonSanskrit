@@ -28,7 +28,7 @@ class CustomKeyboard : InputMethodService(), KeyboardView.OnKeyboardActionListen
         keyboard = Keyboard(this, R.xml.qwerty)
         kv.keyboard = keyboard
         kv.setOnKeyboardActionListener(this)
-        return kv as KeyboardView
+        return kv
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.lvicto.coultersanskrit.ui
+package com.example.lvicto.coultersanskrit.ui.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

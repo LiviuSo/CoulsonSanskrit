@@ -11,7 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.lvicto.coultersanskrit.R
 import com.example.lvicto.coultersanskrit.models.TitlesProvider
-import com.example.lvicto.coultersanskrit.ui.TextBookActivity
+import com.example.lvicto.coultersanskrit.ui.activities.TextBookActivity
 import java.util.ArrayList
 
 class TitlesAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
