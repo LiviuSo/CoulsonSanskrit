@@ -8,16 +8,11 @@ object Constants {
 
         const val SANSKRIT_KEYS_NAME_2 = "SimpleIMEServiceSky"
         const val SANSKRIT_KEYS_PACKAGE_PACKAGE_NAME_2 = "sky.sanskrit.myphotokeyboard"
-    }
 
-    enum class Setup {
-        FRAG_SETUP_INSTALL,
-        FRAG_SETUP_INSTALLED,
-        FRAG_SETUP_ENABLE,
-        FRAG_SETUP_ENABLED,
-        FRAG_SETUP_SELECT,
-        FRAG_SETUP_SELECTED,
-        FRAG_SETUP_NO_TYPE
+        const val REPLY_ADD_WORD_WORD_SA = "word_sa"
+        const val REPLY_ADD_WORD_WORD_EN = "word_en"
+        const val REPLY_ADD_WORD_WORD_RO = "word_ro"
+        const val NEW_WORD_ACTIVITY_REQUEST_CODE = 111
     }
 
     enum class SetupStep {

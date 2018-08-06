@@ -2,15 +2,14 @@ package com.example.lvicto.coultersanskrit.repositories
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
+import android.os.AsyncTask
 import com.example.lvicto.coultersanskrit.db.WordsDatabase
 import com.example.lvicto.coultersanskrit.db.dao.WordDao
 import com.example.lvicto.coultersanskrit.db.entity.Word
-import com.example.lvicto.coultersanskrit.utils.DbWorkerThread
 
 class WordsRepository  internal constructor(val application: Application) {
 
     private val wordsDao: WordDao = WordsDatabase.getInstance(application)!!.wordDao()
-    private var worker: DbWorkerThread = DbWorkerThread("bd_worker_thread")
     val allWords: LiveData<List<Word>>
 
     init {
@@ -18,7 +17,14 @@ class WordsRepository  internal constructor(val application: Application) {
     }
 
     fun insertWord(word: Word) {
-        val task = Runnable { WordsDatabase.getInstance(application)!!.wordDao().insert(word) }
-        worker.postTask(task)
+        InsertAsyncTask(mAsyncTaskDao = wordsDao).execute(word)
+    }
+
+    private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: WordDao) : AsyncTask<Word, Void, Void>() {
+
+        override fun doInBackground(vararg params: Word): Void? {
+            mAsyncTaskDao.insert(params[0])
+            return null
+        }
     }
 }
