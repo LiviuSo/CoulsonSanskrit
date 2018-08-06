@@ -9,6 +9,13 @@ import com.example.lvicto.coultersanskrit.utils.Constants
 import com.example.lvicto.coultersanskrit.utils.KeyboardHelper
 import com.example.lvicto.coultersanskrit.utils.PreferenceHelper
 
+/**
+ * todo:
+ *  Complete
+ *      - add keyboard selector on "select" screen
+ *      - refactor cu lifecycle arch
+ *      - improve ui
+ */
 class SetupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

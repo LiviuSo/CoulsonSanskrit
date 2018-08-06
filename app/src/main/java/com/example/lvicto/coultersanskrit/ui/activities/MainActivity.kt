@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.arch.lifecycle.ViewModelProviders
+import android.util.Log
 import com.example.lvicto.coultersanskrit.viewmodels.ChaptersViewModel
 import com.example.lvicto.coultersanskrit.R
 import com.example.lvicto.coultersanskrit.adapters.TitlesAdapter
@@ -40,5 +41,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.chapterTitles.observe(this, Observer<ArrayList<String>> { titles ->
             (recyclerView.adapter as TitlesAdapter).data = titles!!
         })
+
     }
 }

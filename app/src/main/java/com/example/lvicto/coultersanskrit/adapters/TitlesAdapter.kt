@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.example.lvicto.coultersanskrit.R
-import com.example.lvicto.coultersanskrit.models.TitlesProvider
+import com.example.lvicto.coultersanskrit.source.TitlesProvider
 import com.example.lvicto.coultersanskrit.ui.activities.TextBookActivity
 import java.util.ArrayList
 

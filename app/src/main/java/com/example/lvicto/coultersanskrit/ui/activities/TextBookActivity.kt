@@ -26,7 +26,7 @@ class TextBookActivity : AppCompatActivity() {
 
         val fab = findViewById<FloatingActionButton>(R.id.fabDictionary)
         fab.setOnClickListener {
-            val intent = Intent(MainActivity@this, DictionaryActivity::class.java)
+            val intent = Intent(MainActivity@this, AddWordActivity::class.java)
             startActivity(intent)
         }
     }

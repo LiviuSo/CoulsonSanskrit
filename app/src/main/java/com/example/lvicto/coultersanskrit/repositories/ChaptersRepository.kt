@@ -1,7 +1,7 @@
 package com.example.lvicto.coultersanskrit.repositories
 
 import android.arch.lifecycle.MutableLiveData
-import com.example.lvicto.coultersanskrit.models.TitlesProvider
+import com.example.lvicto.coultersanskrit.source.TitlesProvider
 
 class ChaptersRepository {
 

@@ -1,4 +1,4 @@
-package com.example.lvicto.coultersanskrit.models
+package com.example.lvicto.coultersanskrit.source
 
 import com.example.lvicto.coultersanskrit.MyApplication
 import com.example.lvicto.coultersanskrit.R
