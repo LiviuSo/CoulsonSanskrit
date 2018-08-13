@@ -12,10 +12,48 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/rv_words"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Load from Json"
+                    android:id="@+id/btnLoad"/>
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Save to Json"
+                    android:id="@+id/btnSave"
+                    android:layout_marginBottom="10dp"/>
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Import"
+                    android:id="@+id/btnImport"/>
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Export"
+                    android:id="@+id/btnExport"
+                    android:layout_marginBottom="10dp"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                          android:id="@+id/llJsonImport"
+                          android:visibility="gone">
+                <EditText android:layout_width="match_parent"
+                          android:layout_height="150dp"
+                          android:id="@+id/editJson"
+                          android:minLines="4"
+                          android:maxLines="4"
+                          android:hint="Paste json here"/>
+                <Button android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Load Json"
+                        android:id="@+id/btnLoadJson"/>
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rv_words"/>
+        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -26,6 +64,6 @@
                 android:layout_marginRight="21dp"
                 android:layout_marginEnd="21dp"
                 android:src="@drawable/ic_add_24dp"/>
-
     </FrameLayout>
+
 </android.support.design.widget.CoordinatorLayout>

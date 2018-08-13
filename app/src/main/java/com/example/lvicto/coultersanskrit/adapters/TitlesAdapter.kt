@@ -47,7 +47,7 @@ class TitlesAdapter internal constructor(private val context: Context) : Recycle
                             helper.expandData(position)
                         }
                         notifyDataSetChanged()
-                        Log.d(LOG_TAG, "new data: $helper")
+                        Log.d(LOG_TAG, "new com.example.lvicto.coultersanskrit.data: $helper")
                     },
                     View.OnClickListener {
                         // Toast.makeText(context, "Tapped section", Toast.LENGTH_SHORT).show() // todo remove

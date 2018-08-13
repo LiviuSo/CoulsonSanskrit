@@ -41,6 +41,5 @@ class MainActivity : AppCompatActivity() {
         viewModel.chapterTitles.observe(this, Observer<ArrayList<String>> { titles ->
             (recyclerView.adapter as TitlesAdapter).data = titles!!
         })
-
     }
 }
