@@ -34,7 +34,7 @@
         </service>
 
         <activity
-                android:name=".ui.activities.AddWordActivity"
+                android:name=".ui.activities.AddModifyWordActivity"
                 android:screenOrientation="portrait">
         </activity>
         <activity

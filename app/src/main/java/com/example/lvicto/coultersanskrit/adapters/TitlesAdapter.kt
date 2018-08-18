@@ -37,24 +37,8 @@ class TitlesAdapter internal constructor(private val context: Context) : Recycle
         if (data != null) {
             (holder as ChapterTitleView).bindData(data!![position],
                     getItemViewType(position),
-                    View.OnClickListener {
-                        Toast.makeText(context, "Tapped: ${data!![position]}", Toast.LENGTH_SHORT).show()
-                        val helper = TitlesProvider(data!!)
-                        // collapse if already expanded or just expand
-                        if (helper.isExpanded(position)) {
-                            helper.collapseData(position)
-                        } else {
-                            helper.expandData(position)
-                        }
-                        notifyDataSetChanged()
-                        Log.d(LOG_TAG, "new com.example.lvicto.coultersanskrit.data: $helper")
-                    },
-                    View.OnClickListener {
-                        // Toast.makeText(context, "Tapped section", Toast.LENGTH_SHORT).show() // todo remove
-                        with(context) {
-                            startActivity(Intent(this, TextBookActivity::class.java))
-                        }
-                    })
+                    getClickListenerChapter(position),
+                    getClickListenerTitle())
         }
     }
 
@@ -67,6 +51,26 @@ class TitlesAdapter internal constructor(private val context: Context) : Recycle
             } else {
                 TYPE_NONE
             }
+
+    private fun getClickListenerChapter(position: Int) = View.OnClickListener {
+        Toast.makeText(context, "Tapped: ${data!![position]}", Toast.LENGTH_SHORT).show()
+        val helper = TitlesProvider(data!!)
+        // collapse if already expanded or just expand
+        if (helper.isExpanded(position)) {
+            helper.collapseData(position)
+        } else {
+            helper.expandData(position)
+        }
+        notifyDataSetChanged()
+        Log.d(LOG_TAG, "new com.example.lvicto.coultersanskrit.data: $helper")
+    }
+
+    private fun getClickListenerTitle() = View.OnClickListener {
+        // Toast.makeText(context, "Tapped section", Toast.LENGTH_SHORT).show() // todo remove
+        with(context) {
+            startActivity(Intent(this, TextBookActivity::class.java))
+        }
+    }
 
     companion object {
         private val LOG_TAG = TitlesAdapter::class.java.simpleName

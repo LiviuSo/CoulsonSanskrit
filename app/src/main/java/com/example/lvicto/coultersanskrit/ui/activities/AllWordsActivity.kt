@@ -20,10 +20,13 @@ import com.example.lvicto.coultersanskrit.adapters.WordsAdapter
 import com.example.lvicto.coultersanskrit.db.WordsDatabase
 import com.example.lvicto.coultersanskrit.db.entity.Word
 import com.example.lvicto.coultersanskrit.utils.Constants
-import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.NEW_WORD_ACTIVITY_REQUEST_CODE
+import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.REQUEST_CODE_ADD_WORD
 import com.example.lvicto.coultersanskrit.viewmodels.WordsViewModel
 import com.google.gson.Gson
 import com.example.lvicto.coultersanskrit.data.Words
+import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.EXTRA_WORD
+import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.EXTRA_WORD_ID
+import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.REQUEST_CODE_EDIT_WORD
 
 class AllWordsActivity : AppCompatActivity() {
 
@@ -42,18 +45,26 @@ class AllWordsActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK) {
-                val wordRo = data!!.getStringExtra(Constants.Keyboard.REPLY_ADD_WORD_WORD_RO)
-                val wordEn = data.getStringExtra(Constants.Keyboard.REPLY_ADD_WORD_WORD_EN)
-                val wordSa = data.getStringExtra(Constants.Keyboard.REPLY_ADD_WORD_WORD_SA)
-                val word = Word(word = wordSa, meaningEn = wordEn, meaningRo = wordRo)
-                viewModel.insert(word)
-            } else {
-                Toast.makeText(this, "Word not saved because of missing fields", Toast.LENGTH_SHORT).show()
+        if(resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_ADD_WORD, REQUEST_CODE_EDIT_WORD -> {
+                    val wordRo = data!!.getStringExtra(Constants.Keyboard.EXTRA_WORD_RO)
+                    val wordEn = data.getStringExtra(Constants.Keyboard.EXTRA_WORD_WORD_EN)
+                    val wordSa = data.getStringExtra(Constants.Keyboard.EXTRA_WORD_SA)
+                    val word = Word(word = wordSa, meaningEn = wordEn, meaningRo = wordRo)
+                    if(data.hasExtra(EXTRA_WORD_ID)) {
+                        word.id = data.getIntExtra(EXTRA_WORD_ID, -1)
+                    }
+                    viewModel.insert(word)
+                }
+                else -> {
+                    Log.e(LOG_TAG, "Unknown code on AllWordsActivity.onActivityResult()")
+                }
             }
         }
     }
+
+    private lateinit var recyclerView: RecyclerView
 
     private fun initUI() {
         viewModel = ViewModelProviders.of(this).get(WordsViewModel::class.java)
@@ -85,8 +96,8 @@ class AllWordsActivity : AppCompatActivity() {
             llImport.visibility = View.GONE
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.rv_words)
-        val wordsAdapter = WordsAdapter(this)
+        recyclerView = findViewById<RecyclerView>(R.id.rv_words)
+        val wordsAdapter = WordsAdapter(this, itemClickListener, longClickListener)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = wordsAdapter
         viewModel.allWords.observe(this, Observer<List<Word>> {
@@ -95,8 +106,8 @@ class AllWordsActivity : AppCompatActivity() {
 
         val fab = findViewById<FloatingActionButton>(R.id.fabDictionary)
         fab.setOnClickListener {
-            val intent = Intent(MainActivity@this, AddWordActivity::class.java)
-            startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE)
+            val intent = Intent(MainActivity@this, AddModifyWordActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ADD_WORD)
         }
     }
 
@@ -136,5 +147,20 @@ class AllWordsActivity : AppCompatActivity() {
 
     private val importObserver = Observer<String> {
         // todo
+    }
+
+    private val itemClickListener = View.OnClickListener {
+        val intentEdit = Intent(AllWordsActivity@this, AddModifyWordActivity::class.java)
+        intentEdit.putExtra(EXTRA_WORD, it!!.tag as Word)
+        AllWordsActivity@this.startActivityForResult(intentEdit, REQUEST_CODE_EDIT_WORD)
+    }
+
+    private val longClickListener: View.OnLongClickListener = View.OnLongClickListener {
+        Toast.makeText(this, "Long tap", Toast.LENGTH_SHORT).show()
+        val adapter: WordsAdapter = recyclerView.adapter as WordsAdapter
+        val count = adapter.itemCount
+        adapter.type = WordsAdapter.TYPE_REMOVABLE
+        recyclerView.adapter.notifyItemRangeChanged(0, count)
+        true
     }
 }
