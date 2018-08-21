@@ -31,6 +31,9 @@ import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.REQUEST_CODE_
 class AllWordsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: WordsViewModel
+    private lateinit var llRemoveCancel: LinearLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var llImport: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +56,7 @@ class AllWordsActivity : AppCompatActivity() {
                     val wordSa = data.getStringExtra(Constants.Keyboard.EXTRA_WORD_SA)
                     val word = Word(word = wordSa, meaningEn = wordEn, meaningRo = wordRo)
                     if(data.hasExtra(EXTRA_WORD_ID)) {
-                        word.id = data.getIntExtra(EXTRA_WORD_ID, -1)
+                        word.id = data.getLongExtra(EXTRA_WORD_ID, -1L)
                     }
                     viewModel.insert(word)
                 }
@@ -64,24 +67,20 @@ class AllWordsActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var recyclerView: RecyclerView
-
     private fun initUI() {
         viewModel = ViewModelProviders.of(this).get(WordsViewModel::class.java)
 
         val btnLoad = findViewById<Button>(R.id.btnLoad)
         btnLoad.setOnClickListener { _ ->
-            viewModel.loadFromPrivateFile().observe(AllWordsActivity@this, loadFromJsomObserver)
+            viewModel.loadFromPrivateFile().observe(AllWordsActivity@this, loadFromJsonObserver)
         }
-        btnLoad.visibility = View.GONE
 
         val btnSave = findViewById<Button>(R.id.btnSave)
         btnSave.setOnClickListener { _ ->
             viewModel.allWords.observe(this, saveToFileObserver)
         }
-        btnSave.visibility = View.GONE
 
-        val llImport = findViewById<LinearLayout>(R.id.llJsonImport)
+        llImport = findViewById<LinearLayout>(R.id.llJsonImport)
         findViewById<Button>(R.id.btnImport).setOnClickListener { _ ->
             llImport.visibility = View.VISIBLE
             viewModel.loadFromPrivateFile().observe(AllWordsActivity@this, importObserver)
@@ -91,18 +90,26 @@ class AllWordsActivity : AppCompatActivity() {
         }
         val edit = findViewById<EditText>(R.id.editJson)
         findViewById<Button>(R.id.btnLoadJson).setOnClickListener {
-//            Toast.makeText(AllWordsActivity@this, "Load Json", Toast.LENGTH_SHORT).show()
-            viewModel.loadFromString(edit.text.toString()).observe(AllWordsActivity@this, loadFromJsomObserver)
+            viewModel.loadFromString(edit.text.toString()).observe(AllWordsActivity@this, loadFromJsonObserver)
             llImport.visibility = View.GONE
         }
 
-        recyclerView = findViewById<RecyclerView>(R.id.rv_words)
+        recyclerView = findViewById(R.id.rv_words)
         val wordsAdapter = WordsAdapter(this, itemClickListener, longClickListener)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = wordsAdapter
         viewModel.allWords.observe(this, Observer<List<Word>> {
             wordsAdapter.words = it
         })
+
+        llRemoveCancel = findViewById(R.id.llRemoveCancel)
+        val btnRemove = findViewById<Button>(R.id.btnRemove)
+        btnRemove.setOnClickListener(this::removeSelected)
+        val btnCancel = findViewById<Button>(R.id.btnCancel)
+        btnCancel.setOnClickListener {
+            (recyclerView.adapter as WordsAdapter).unselectRemoveSelected()
+            cancelRemoveSelected()
+        }
 
         val fab = findViewById<FloatingActionButton>(R.id.fabDictionary)
         fab.setOnClickListener {
@@ -111,11 +118,22 @@ class AllWordsActivity : AppCompatActivity() {
         }
     }
 
+    private fun removeSelected(v: View) {
+        (recyclerView.adapter as WordsAdapter).removeSelected(v)
+        updateRevViewItems(WordsAdapter.TYPE_NON_REMOVABLE)
+        llRemoveCancel.visibility = View.GONE
+    }
+
+    private fun cancelRemoveSelected() {
+        updateRevViewItems(WordsAdapter.TYPE_NON_REMOVABLE)
+        llRemoveCancel.visibility = View.GONE
+    }
+
     companion object {
         private val LOG_TAG = AllWordsActivity::class.java.simpleName
     }
 
-    private val loadFromJsomObserver = Observer<String> { it ->
+    private val loadFromJsonObserver = Observer<String> { it ->
         Log.d(LOG_TAG, it)
         if(!it!!.isEmpty()) {
             val list = Gson().fromJson(it, Words::class.java)
@@ -129,7 +147,7 @@ class AllWordsActivity : AppCompatActivity() {
     private val saveToFileObserver = Observer<List<Word>> { it ->
         if (it != null) {
             // save on private file
-            viewModel.saveToPrivateFile(Words(it)).observe(AllWordsActivity@this, Observer<()->Unit> {
+            viewModel.saveToPrivateFile(Words(it)).observe(this@AllWordsActivity, Observer<()->Unit> {
                 it?.invoke() // todo make it return json string
                 // todo launch share intent
             })
@@ -157,10 +175,23 @@ class AllWordsActivity : AppCompatActivity() {
 
     private val longClickListener: View.OnLongClickListener = View.OnLongClickListener {
         Toast.makeText(this, "Long tap", Toast.LENGTH_SHORT).show()
+        updateRevViewItems(WordsAdapter.TYPE_REMOVABLE)
+        llRemoveCancel.visibility = View.VISIBLE
+        true
+    }
+
+    private fun updateRevViewItems(type: Int) {
         val adapter: WordsAdapter = recyclerView.adapter as WordsAdapter
         val count = adapter.itemCount
-        adapter.type = WordsAdapter.TYPE_REMOVABLE
+        adapter.type = type
         recyclerView.adapter.notifyItemRangeChanged(0, count)
-        true
+    }
+
+    override fun onBackPressed() {
+        when {
+            llImport.visibility == View.VISIBLE -> llImport.visibility = View.GONE
+            llRemoveCancel.visibility == View.VISIBLE -> cancelRemoveSelected()
+            else -> super.onBackPressed()
+        }
     }
 }

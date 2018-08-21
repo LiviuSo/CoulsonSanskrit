@@ -22,7 +22,7 @@ class AddModifyWordActivity : AppCompatActivity() {
     private lateinit var editWordRo: EditText
     private lateinit var editWordEn: EditText
     private lateinit var buttonSave: Button
-    private var id: Int? = null
+    private var id: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

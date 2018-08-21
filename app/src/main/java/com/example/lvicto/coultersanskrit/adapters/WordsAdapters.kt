@@ -6,27 +6,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
-import android.widget.Toast
 import com.example.lvicto.coultersanskrit.R
 import com.example.lvicto.coultersanskrit.db.entity.Word
 
 
-class WordsAdapter(val context: Context,
-                   private val clickListener: View.OnClickListener,
-                   private val longClickListener: View.OnLongClickListener) : RecyclerView.Adapter<WordsAdapter.WordViewHolder>() {
+class WordsAdapter(private val context: Context, private val clickListener: View.OnClickListener, private val longClickListener: View.OnLongClickListener) : RecyclerView.Adapter<WordsAdapter.WordViewHolder>() {
 
+    var type: Int = TYPE_NON_REMOVABLE
     var words: List<Word>? = null
         set(value) {
-            if(value != null) {
+            if (value != null) {
                 field = value
                 notifyDataSetChanged()
             }
         }
-
+    val selectedToRemove = arrayListOf<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordsAdapter.WordViewHolder {
-        val view = if(type == TYPE_NON_REMOVABLE) {
+        val view = if (type == TYPE_NON_REMOVABLE) {
             LayoutInflater.from(context).inflate(R.layout.item_word, parent, false)
         } else {
             LayoutInflater.from(context).inflate(R.layout.item_word_removable, parent, false)
@@ -35,7 +34,7 @@ class WordsAdapter(val context: Context,
     }
 
     override fun getItemCount(): Int {
-        return if(words != null) {
+        return if (words != null) {
             words!!.size
         } else {
             0
@@ -43,22 +42,38 @@ class WordsAdapter(val context: Context,
     }
 
     override fun onBindViewHolder(holder: WordsAdapter.WordViewHolder, position: Int) {
-        if(words != null) {
-            holder.bindData(words!![position], getItemViewType(position))
+        if (words != null) {
+            holder.bindData(words!![position], getItemViewType(position), position)
         } else {
             Log.e(LOG_TAG, "Empty or null data")
         }
     }
 
-    var type: Int = TYPE_NON_REMOVABLE
-
     override fun getItemViewType(position: Int): Int = type
 
-    class WordViewHolder(val view: View,
-                         private val clickListener: View.OnClickListener,
-                         private val longClickListener: View.OnLongClickListener) : RecyclerView.ViewHolder(view) {
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
 
-        fun bindData(word: Word, type: Int) { // todo complete
+    fun removeSelected(v: View) {
+        selectedToRemove.forEach {
+            val pos = getItemId(it).toInt()
+            (words as ArrayList).removeAt(pos)
+            notifyItemRemoved(pos)
+            notifyItemRangeChanged(pos, (words as java.util.ArrayList<Word>).size)
+        }
+        selectedToRemove.clear()
+    }
+
+    fun unselectRemoveSelected() {
+        // todo
+    }
+
+    inner class WordViewHolder(val view: View,
+                               private val clickListener: View.OnClickListener,
+                               private val longClickListener: View.OnLongClickListener) : RecyclerView.ViewHolder(view) {
+
+        fun bindData(word: Word, type: Int, position: Int) { // todo complete
             view.tag = word
             view.findViewById<TextView>(R.id.tvItemWord).text = word.word
             view.setOnClickListener(clickListener)
@@ -68,7 +83,16 @@ class WordsAdapter(val context: Context,
                     // do specifics
                 }
                 TYPE_REMOVABLE -> {
-                    // do specifics
+                    val checkBox = view.findViewById<CheckBox>(R.id.ckbItem)
+                    checkBox.setOnCheckedChangeListener { cb, checked ->
+                        if(!checked) {
+                            selectedToRemove.remove(position)
+                            Log.d(LOG_TAG, "De-selected $position")
+                        } else {
+                            selectedToRemove.add(position)
+                            Log.d(LOG_TAG, "Selected $position")
+                        }
+                    }
                 }
                 else -> {
                     Log.d(LOG_TAG, "Unknown type of recycler view item ")
@@ -81,5 +105,9 @@ class WordsAdapter(val context: Context,
         const val TYPE_REMOVABLE = 1
         const val TYPE_NON_REMOVABLE = 2
         val LOG_TAG = WordsAdapter::class.java.toString()
+    }
+
+    init {
+        this.setHasStableIds(true)
     }
 }

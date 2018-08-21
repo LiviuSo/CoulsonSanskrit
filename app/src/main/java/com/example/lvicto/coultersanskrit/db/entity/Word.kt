@@ -8,19 +8,19 @@ import android.os.Parcelable
 
 
 @Entity(tableName = "word_table")
-data class Word(@field:PrimaryKey(autoGenerate = true) @field:ColumnInfo(name = "id") var id: Int = 0,
+data class Word(@field:PrimaryKey(autoGenerate = true) @field:ColumnInfo(name = "id") var id: Long = 0,
                 @field:ColumnInfo(name = "word") val word: String,
                 @field:ColumnInfo(name = "meaningEn") val meaningEn: String = "",
                 @field:ColumnInfo(name = "meaningRo") val meaningRo: String = "") : Parcelable {
 
     constructor(parcel: Parcel) : this(
-            parcel.readInt(),
+            parcel.readLong(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString())
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest!!.writeInt(id)
+        dest!!.writeLong(id)
         dest.writeString(word)
         dest.writeString(meaningEn)
         dest.writeString(meaningRo)
