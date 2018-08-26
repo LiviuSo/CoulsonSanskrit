@@ -40,8 +40,9 @@ class AllWordsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_all_words)
 
         // for testing
-        val db = WordsDatabase.getInstance(this)!!
-        db.popupateDbForTesting()
+//        val db = WordsDatabase.getInstance(this)!!
+//        db.popupateDbForTesting()
+        // todo 0-state screen
 
         initUI()
     }
@@ -77,16 +78,18 @@ class AllWordsActivity : AppCompatActivity() {
 
         val btnSave = findViewById<Button>(R.id.btnSave)
         btnSave.setOnClickListener { _ ->
-            viewModel.allWords.observe(this, saveToFileObserver)
+//            viewModel.allWords.observe(this, saveToFileObserver)
+            // todo add Rx subcribe()
         }
 
-        llImport = findViewById<LinearLayout>(R.id.llJsonImport)
+        llImport = findViewById(R.id.llJsonImport)
         findViewById<Button>(R.id.btnImport).setOnClickListener { _ ->
             llImport.visibility = View.VISIBLE
             viewModel.loadFromPrivateFile().observe(AllWordsActivity@this, importObserver)
         }
         findViewById<Button>(R.id.btnExport).setOnClickListener { _ ->
             viewModel.allWords.observe(this, exportObserver)
+//            viewModel.allWords.subscribe(this::export)
         }
         val edit = findViewById<EditText>(R.id.editJson)
         findViewById<Button>(R.id.btnLoadJson).setOnClickListener {
@@ -101,6 +104,7 @@ class AllWordsActivity : AppCompatActivity() {
         viewModel.allWords.observe(this, Observer<List<Word>> {
             wordsAdapter.words = it
         })
+//        viewModel.allWords.subscribe(this::setAdapterData)
 
         llRemoveCancel = findViewById(R.id.llRemoveCancel)
         val btnRemove = findViewById<Button>(R.id.btnRemove)
@@ -118,11 +122,27 @@ class AllWordsActivity : AppCompatActivity() {
         }
     }
 
-    private fun removeSelected(v: View) {
-        (recyclerView.adapter as WordsAdapter).removeSelected(v)
-        updateRevViewItems(WordsAdapter.TYPE_NON_REMOVABLE)
-        llRemoveCancel.visibility = View.GONE
+    private fun setAdapterData(words: List<Word>) {
+        (recyclerView.adapter as WordsAdapter).words = words
     }
+
+    private fun removeSelected(v: View) {
+        val adapter = recyclerView.adapter as WordsAdapter
+        viewModel.deleteWords(adapter.getWordsToRemove()).subscribe(this::log)
+    }
+
+    private fun log(c: Int) {
+        Log.d(LOG_TAG, "Deleted $c rows")
+    }
+
+//    private fun refreshWords(dummy: Int) {
+//        viewModel.allWords.observe(this, Observer<List<Word>> {
+//            val adapter = recyclerView.adapter as WordsAdapter
+//            adapter.words = it
+//            updateRevViewItems(WordsAdapter.TYPE_NON_REMOVABLE)
+//            llRemoveCancel.visibility = View.GONE
+//        })
+//    }
 
     private fun cancelRemoveSelected() {
         updateRevViewItems(WordsAdapter.TYPE_NON_REMOVABLE)
@@ -144,23 +164,27 @@ class AllWordsActivity : AppCompatActivity() {
         }
     }
 
-    private val saveToFileObserver = Observer<List<Word>> { it ->
-        if (it != null) {
-            // save on private file
-            viewModel.saveToPrivateFile(Words(it)).observe(this@AllWordsActivity, Observer<()->Unit> {
-                it?.invoke() // todo make it return json string
-                // todo launch share intent
-            })
-        }
-    }
+//    private val saveToFileObserver = Observer<List<Word>> { it ->
+//        if (it != null) {
+             // save on private file
+//            viewModel.saveToPrivateFile(Words(it)).observe(this@AllWordsActivity, Observer<()->Unit> {
+//                it?.invoke() // todo make it return json string
+                 // todo launch share intent
+//            })
+//        }
+//    }
 
-    private val exportObserver = Observer<List<Word>> {
-        val jsonString = Gson().toJson(Words(it!!))
+    private fun export(words: List<Word>) {
+        val jsonString = Gson().toJson(Words(words))
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_SUBJECT, "Sanskrit dic as json (String)")
         intent.putExtra(Intent.EXTRA_TEXT, jsonString)
         startActivity(Intent.createChooser(intent, "Share using")) // todo make a string resource
+    }
+
+    private val exportObserver = Observer<List<Word>> {
+        export(it!!)
     }
 
     private val importObserver = Observer<String> {
@@ -182,9 +206,11 @@ class AllWordsActivity : AppCompatActivity() {
 
     private fun updateRevViewItems(type: Int) {
         val adapter: WordsAdapter = recyclerView.adapter as WordsAdapter
-        val count = adapter.itemCount
+//        val count = adapter.itemCount
         adapter.type = type
-        recyclerView.adapter.notifyItemRangeChanged(0, count)
+//        recyclerView.adapter.notifyItemRangeChanged(0, count)
+        adapter.notifyDataSetChanged()
+
     }
 
     override fun onBackPressed() {

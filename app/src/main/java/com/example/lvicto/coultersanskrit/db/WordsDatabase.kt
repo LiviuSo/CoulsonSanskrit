@@ -36,11 +36,7 @@ abstract class WordsDatabase : RoomDatabase() {
 
     private class PopulateDbAsync internal constructor(db: WordsDatabase) : AsyncTask<Void, Void, Void>() {
 
-        private val mDao: WordDao
-
-        init {
-            mDao = db.wordDao()
-        }
+        private val mDao: WordDao = db.wordDao()
 
         override fun doInBackground(vararg params: Void): Void? {
             mDao.deleteAll()

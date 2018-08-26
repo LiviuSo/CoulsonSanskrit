@@ -1,17 +1,14 @@
 package com.example.lvicto.coultersanskrit.db.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.example.lvicto.coultersanskrit.db.entity.Word
 
 @Dao
- interface WordDao {
+interface WordDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(word: Word)
+    fun insert(word: Word) // also updates
 
     @Query("DELETE FROM word_table")
     fun deleteAll()
@@ -19,7 +16,9 @@ import com.example.lvicto.coultersanskrit.db.entity.Word
     @Query("SELECT * from word_table ORDER BY word ASC")
     fun getAllWords(): LiveData<List<Word>>
 
-   // todo add update word
+//    @Query("SELECT * from word_table ORDER BY word ASC") // todo spike keep RX or LiveData
+//    fun getAllWords(): List<Word>
 
-    // todo add delete word
+    @Delete
+    fun deleteWords(words: List<Word>): Int
 }

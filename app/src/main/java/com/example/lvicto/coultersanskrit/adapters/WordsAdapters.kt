@@ -69,6 +69,10 @@ class WordsAdapter(private val context: Context, private val clickListener: View
         // todo
     }
 
+    fun getWordsToRemove(): List<Word> = selectedToRemove.map {
+        words!![it]
+    }
+
     inner class WordViewHolder(val view: View,
                                private val clickListener: View.OnClickListener,
                                private val longClickListener: View.OnLongClickListener) : RecyclerView.ViewHolder(view) {
@@ -85,7 +89,7 @@ class WordsAdapter(private val context: Context, private val clickListener: View
                 TYPE_REMOVABLE -> {
                     val checkBox = view.findViewById<CheckBox>(R.id.ckbItem)
                     checkBox.setOnCheckedChangeListener { cb, checked ->
-                        if(!checked) {
+                        if (!checked) {
                             selectedToRemove.remove(position)
                             Log.d(LOG_TAG, "De-selected $position")
                         } else {
