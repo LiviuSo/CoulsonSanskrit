@@ -8,11 +8,11 @@ import android.widget.ImageView
 import com.example.lvicto.coultersanskrit.R
 
 
-class TextBookActivity : AppCompatActivity() {
+class PageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_text_book)
+        setContentView(R.layout.activity_page)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = "${getString(R.string.chapter)} xxx" // todo retrieve the chapter name from previous activity

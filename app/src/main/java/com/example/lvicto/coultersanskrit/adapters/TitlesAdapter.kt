@@ -11,7 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.lvicto.coultersanskrit.R
 import com.example.lvicto.coultersanskrit.source.TitlesProvider
-import com.example.lvicto.coultersanskrit.ui.activities.TextBookActivity
+import com.example.lvicto.coultersanskrit.ui.activities.PageActivity
 import java.util.ArrayList
 
 class TitlesAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -68,7 +68,7 @@ class TitlesAdapter internal constructor(private val context: Context) : Recycle
     private fun getClickListenerTitle() = View.OnClickListener {
         // Toast.makeText(context, "Tapped section", Toast.LENGTH_SHORT).show() // todo remove
         with(context) {
-            startActivity(Intent(this, TextBookActivity::class.java))
+            startActivity(Intent(this, PageActivity::class.java))
         }
     }
 

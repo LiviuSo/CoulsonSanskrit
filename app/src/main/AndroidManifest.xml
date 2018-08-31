@@ -12,14 +12,6 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
-        <activity android:name=".ui.activities.MainActivity">
-        </activity>
-        <activity
-                android:name=".ui.activities.TextBookActivity"
-                android:screenOrientation="portrait">
-        </activity>
-
         <service
                 android:name="com.example.sanskritkeyboard.CustomKeyboard"
                 android:label="CustomKeyboard"
@@ -33,6 +25,12 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".ui.activities.BookActivity">
+        </activity>
+        <activity
+                android:name=".ui.activities.PageActivity"
+                android:screenOrientation="portrait">
+        </activity>
         <activity
                 android:name=".ui.activities.AddModifyWordActivity"
                 android:screenOrientation="portrait">
@@ -40,13 +38,15 @@
         <activity
                 android:name=".ui.activities.SetupActivity"
                 android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".ui.activities.AllWordsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.activities.DictionaryActivity">
+        </activity>
+        <activity android:name=".ui.activities.MainActivity">
         </activity>
     </application>
 

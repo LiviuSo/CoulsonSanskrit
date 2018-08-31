@@ -17,7 +17,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.lvicto.coultersanskrit.R
 import com.example.lvicto.coultersanskrit.adapters.WordsAdapter
-import com.example.lvicto.coultersanskrit.db.WordsDatabase
 import com.example.lvicto.coultersanskrit.db.entity.Word
 import com.example.lvicto.coultersanskrit.utils.Constants
 import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.REQUEST_CODE_ADD_WORD
@@ -28,7 +27,7 @@ import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.EXTRA_WORD
 import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.EXTRA_WORD_ID
 import com.example.lvicto.coultersanskrit.utils.Constants.Keyboard.REQUEST_CODE_EDIT_WORD
 
-class AllWordsActivity : AppCompatActivity() {
+class DictionaryActivity : AppCompatActivity() {
 
     private lateinit var viewModel: WordsViewModel
     private lateinit var llRemoveCancel: LinearLayout
@@ -37,7 +36,7 @@ class AllWordsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_all_words)
+        setContentView(R.layout.activity_dictionary)
 
         // for testing
 //        val db = WordsDatabase.getInstance(this)!!
@@ -62,7 +61,7 @@ class AllWordsActivity : AppCompatActivity() {
                     viewModel.insert(word)
                 }
                 else -> {
-                    Log.e(LOG_TAG, "Unknown code on AllWordsActivity.onActivityResult()")
+                    Log.e(LOG_TAG, "Unknown code on DictionaryActivity.onActivityResult()")
                 }
             }
         }
@@ -150,7 +149,7 @@ class AllWordsActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val LOG_TAG = AllWordsActivity::class.java.simpleName
+        private val LOG_TAG = DictionaryActivity::class.java.simpleName
     }
 
     private val loadFromJsonObserver = Observer<String> { it ->
@@ -167,7 +166,7 @@ class AllWordsActivity : AppCompatActivity() {
 //    private val saveToFileObserver = Observer<List<Word>> { it ->
 //        if (it != null) {
              // save on private file
-//            viewModel.saveToPrivateFile(Words(it)).observe(this@AllWordsActivity, Observer<()->Unit> {
+//            viewModel.saveToPrivateFile(Words(it)).observe(this@DictionaryActivity, Observer<()->Unit> {
 //                it?.invoke() // todo make it return json string
                  // todo launch share intent
 //            })
